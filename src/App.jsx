@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { setCookie, getCookie } from './utils/cookies'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  // Load count from cookie when component mounts
+  useEffect(() => {
+    const savedCount = getCookie('count');
+    if (savedCount) {
+      setCount(parseInt(savedCount, 10));
+    }
+  }, [])
+
+  // Save count to cookie whenever it changes
+  const handleCountChange = () => {
+    const newCount = count + 1;
+    setCount(newCount);
+    setCookie('count', newCount.toString());
+  }
 
   return (
     <>
@@ -18,7 +34,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={handleCountChange}>
           count is {count}
         </button>
         <p>
