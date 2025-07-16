@@ -185,10 +185,17 @@ const Standings = () => {
                             </button>
                             <button
                                 type="button"
-                                className={`btn ${dataType === 'soccer' ? 'btn-primary' : 'btn-outline-primary'}`}
-                                onClick={() => handleDataTypeChange('soccer')}
+                                className={`btn ${dataType === 'al' ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => handleDataTypeChange('al')}
                             >
-                                Soccer Players
+                               American League
+                            </button>
+                            <button
+                                type="button"
+                                className={`btn ${dataType === 'nl' ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => handleDataTypeChange('nl')}
+                            >
+                                National League
                             </button>
                         </div>
                     </div>
@@ -208,11 +215,11 @@ const Standings = () => {
                     <div className="card">
                         <div className="card-header">
                             <h3 className="card-title mb-0">
-                                {dataType === 'mlb' ? 'MLB Team Standings' : 'Soccer Player Stats'}
+                                {dataType === 'mlb' ? 'MLB Team Standings' : dataType === 'nl' ? 'National League Standings' : 'American League Standings'}
                             </h3>
                         </div>
                         <div className="card-body p-0">
-                            {dataType === 'mlb' ? renderMLBStandings() : renderNBAStandings()}
+                            {renderMLBStandings()}
                         </div>
                     </div>
 
