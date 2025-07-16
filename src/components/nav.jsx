@@ -2,8 +2,6 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react'
 import MLB from '../pages/mlb.jsx'
 import NHL from '../pages/nhl.jsx'
-import Stats from '../pages/stats.jsx'
-import PlayerStats from './playerstats.jsx';
 
 import './nav.css'
 
@@ -16,10 +14,6 @@ function NAV() {
                 return <MLB />
             case 'nhl':
                 return <NHL />
-            case 'stats':
-                return <Stats />
-            case 'playerstats':
-                return <PlayerStats />
             default:
                 return <MLB />
         }
@@ -39,18 +33,6 @@ function NAV() {
                     className={currentPage === 'nhl' ? 'active' : ''}
                 >
                     NHL
-                </button>
-                <button
-                    onClick={() => setCurrentPage('stats')}
-                    className={currentPage === 'stats' ? 'active' : ''}
-                >
-                    Stats
-                </button>
-                <button
-                    onClick={() => setCurrentPage('playerstats')}
-                    className={currentPage === 'playerstats' ? 'active' : ''}
-                >
-                    Player Stats dev
                 </button>
             </nav>
             {renderPage()}
