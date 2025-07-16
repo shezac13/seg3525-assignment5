@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { sportsAPI } from '../api/apiUtils.js';
 import './standings.css';
 
@@ -151,7 +152,14 @@ const Standings = () => {
                             <tbody>
                                 {division.teamRecords.map((team, teamIndex) => (
                                     <tr key={`${divIndex}-${teamIndex}`}>
-                                        <td><strong>{team.team.name}</strong></td>
+                                        <td>
+                                            <Link
+                                                to={`/seg3525-assignment5/team/${team.team.id}`}
+                                                // className="text-decoration-none"
+                                            >
+                                                <strong>{team.team.name}</strong>
+                                            </Link>
+                                        </td>
                                         <td>{team.wins}</td>
                                         <td>{team.losses}</td>
                                         <td>{team.winningPercentage}</td>
@@ -188,7 +196,7 @@ const Standings = () => {
                                 className={`btn ${dataType === 'al' ? 'btn-primary' : 'btn-outline-primary'}`}
                                 onClick={() => handleDataTypeChange('al')}
                             >
-                               American League
+                                American League
                             </button>
                             <button
                                 type="button"
