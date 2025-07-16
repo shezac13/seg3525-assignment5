@@ -15,9 +15,7 @@ const NotFoundPage = () => {
 function App() {
   return (
     <div>
-      {/* <MLB /> */}
       <Nav />
-      <Standings />
     </div>
   )
 }

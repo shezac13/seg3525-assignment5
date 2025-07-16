@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 // import '../App.css';
 import './mlb.css'
+import Standings from '../components/standings';
 
 const MLB = () => {
     const teams = [
@@ -18,7 +19,9 @@ const MLB = () => {
                 <header className="mlb-header">
                     <h1>Major League Baseball</h1>
                 </header>
-
+                <div>
+                    <Standings />
+                </div>
                 <main className="mlb-content">
                     <section className="mlb-info">
                         <h2>About MLB</h2>
