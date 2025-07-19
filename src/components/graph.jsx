@@ -20,7 +20,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                     {payload.map((entry, index) => (
                         <p key={index} style={{ margin: 0, color: entry.color }}>
                             {`${entry.name}: ${entry.value}`}
-                    </p>
+                        </p>
                     ))}
                 </div>
             );
@@ -73,7 +73,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                             dot={{ r: 3 }}
                             activeDot={{ r: 4 }}
                             name={yName2 || 'Second Line'}
-                    />
+                        />
                     )}
 
                 </LineChart>
