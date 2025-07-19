@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { sportsAPI } from '../api/apiUtils.js';
 import MyChart from '../components/graph.jsx';
+import { setCookie, getCookie } from '../utils/cookies.js';
 
 import './TeamDetails.css';
 
@@ -46,6 +47,44 @@ const TeamDetails = () => {
 
     const { width: chartWidth, height: chartHeight } = getChartDimensions();
 
+    // Cookie management functions for allYearStats
+    const COOKIE_NAME = 'mlb_stats_2000_2024';
+    const COOKIE_EXPIRY_DAYS = 7; // Cache for 7 days as the values are from previous years
+
+    const saveStatsToCache = (stats) => {
+        try {
+            const dataToCache = {
+                data: stats,
+                timestamp: Date.now(),
+                version: '1.0' // For future cache invalidation if data structure changes
+            };
+            setCookie(COOKIE_NAME, JSON.stringify(dataToCache), COOKIE_EXPIRY_DAYS);
+        } catch (error) {
+            console.warn('Failed to save stats to cache:', error);
+        }
+    };
+
+    const loadStatsFromCache = () => {
+        try {
+            const cachedData = getCookie(COOKIE_NAME);
+            if (!cachedData) return null;
+
+            const parsed = JSON.parse(cachedData);
+            const cacheAge = Date.now() - parsed.timestamp;
+            const maxAge = COOKIE_EXPIRY_DAYS * 24 * 60 * 60 * 1000; // Convert days to milliseconds
+
+            // Check if cache is still valid
+            if (cacheAge > maxAge) {
+                return null;
+            }
+
+            return parsed.data;
+        } catch (error) {
+            console.warn('Failed to load stats from cache:', error);
+            return null;
+        }
+    };
+
     const findTeamData = (standingsData, teamId) => {
         let foundTeam = null;
         // Find the team in the standings data
@@ -66,8 +105,6 @@ const TeamDetails = () => {
         const fetchTeamData = async () => {
             try {
                 setLoading(true);
-                // For now, we'll get the team data from the standings
-                // In a real application, you might have a specific API endpoint for team details
                 const standingsData = await sportsAPI.getMLBStandings();
 
                 let foundTeam = null;
@@ -76,8 +113,20 @@ const TeamDetails = () => {
                 if (foundTeam) {
                     setTeamData(foundTeam);
 
-                    const allStats = await getAllYearRangeStats(2000, 2024); //default range 2000-2024
-                    setAllYearStats(allStats); // Store in state
+                    // Try to load stats from cache first
+                    let allStats = loadStatsFromCache();
+
+                    if (allStats) {
+                        console.log('Loading MLB stats from cache');
+                        setAllYearStats(allStats);
+                    } else {
+                        console.log('Fetching MLB stats from API (cache miss)');
+                        allStats = await getAllYearRangeStats(2000, 2024); //default range 2000-2024
+                        setAllYearStats(allStats);
+
+                        // Save to cache for future use
+                        saveStatsToCache(allStats);
+                    }
                 } else {
                     setError('Team not found');
                 }
@@ -163,7 +212,7 @@ const TeamDetails = () => {
         cardinals: { key: 138, label: 'St. Louis Cardinals' },
         rays: { key: 139, label: 'Tampa Bay Rays' },
         rangers: { key: 140, label: 'Texas Rangers' },
-        jays: { key: 141, label: 'Toronto Blue Jays' },
+        bluejays: { key: 141, label: 'Toronto Blue Jays' },
         nationals: { key: 120, label: 'Washington Nationals' },
     };
 
