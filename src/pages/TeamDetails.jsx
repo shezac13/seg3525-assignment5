@@ -209,7 +209,7 @@ const TeamDetails = () => {
     }
 
     return (
-        <div>
+        <div style={{ marginTop: '20px' }}>
             <button
                 className="btn btn-outline-secondary mb-3"
                 onClick={() => navigate('/seg3525-assignment5/mlb/')}
