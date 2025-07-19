@@ -40,7 +40,7 @@ const TeamDetails = () => {
     // Calculate chart dimensions based on window size
     const getChartDimensions = () => {
         const width = Math.max(windowSize.width * 0.7, 300);
-        const height = Math.max(windowSize.height * 0.6, 300); 
+        const height = Math.max(windowSize.height * 0.6, 300);
 
         return { width, height };
     };
