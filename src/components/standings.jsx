@@ -91,44 +91,6 @@ const Standings = () => {
         );
     }
 
-    // Render NBA standings
-    const renderNBAStandings = () => {
-        if (!data || !data.players) return null;
-
-        return (
-            <div className="table-responsive">
-                <table className="table table-striped table-hover">
-                    <thead className="table-dark">
-                        <tr>
-                            <th>Player</th>
-                            <th>Team</th>
-                            <th>Position</th>
-                            <th>Games</th>
-                            <th>Points</th>
-                            <th>Rebounds</th>
-                            <th>Assists</th>
-                            <th>FG%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.players.map((player, index) => (
-                            <tr key={index}>
-                                <td><strong>{player.name}</strong></td>
-                                <td>{player.team}</td>
-                                <td>{player.position}</td>
-                                <td>{player.gamesPlayed}</td>
-                                <td>{player.points}</td>
-                                <td>{player.rebounds}</td>
-                                <td>{player.assists}</td>
-                                <td>{player.fieldGoalPercentage}%</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
-
     // Render MLB standings
     const renderMLBStandings = () => {
         if (!data || !data.records) return null;
@@ -155,7 +117,6 @@ const Standings = () => {
                                         <td>
                                             <Link
                                                 to={`/seg3525-assignment5/team/${team.team.id}`}
-                                                // className="text-decoration-none"
                                             >
                                                 <strong>{team.team.name}</strong>
                                             </Link>
