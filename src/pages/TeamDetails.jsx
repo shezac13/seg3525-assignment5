@@ -13,6 +13,9 @@ const TeamDetails = () => {
     const [error, setError] = useState(null);
     const [chartData, setChartData] = useState();
     const [chartDataType, setChartDataType] = useState('wins');
+    const [allYearStats, setAllYearStats] = useState(null);
+    const [startYear, setStartYear] = useState(2000);
+    const [endYear, setEndYear] = useState(2024);
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -73,8 +76,8 @@ const TeamDetails = () => {
                 if (foundTeam) {
                     setTeamData(foundTeam);
 
-                    const stats = await getYearRangeStats(teamId, 2000, 2024); //default range 2017-2024
-                    setChartData(stats);
+                    const allStats = await getAllYearRangeStats(2000, 2024); //default range 2000-2024
+                    setAllYearStats(allStats); // Store in state
                 } else {
                     setError('Team not found');
                 }
@@ -107,6 +110,21 @@ const TeamDetails = () => {
     const handleDataTypeChange = (type) => {
         setChartDataType(type);
     };
+
+    // Function to update chart data based on year range
+    const updateChartData = () => {
+        if (allYearStats && teamId) {
+            const filteredStats = getTeamStatsFromAllYears(teamId).filter(
+                item => item.name >= startYear && item.name <= endYear
+            );
+            setChartData(filteredStats);
+        }
+    };
+
+    // Update chart when year range or data type changes
+    useEffect(() => {
+        updateChartData();
+    }, [startYear, endYear, allYearStats, teamId]);
 
     const dataTypeChartOptions = {
         winningPercentage: { key: 'value.leagueRecord.pct', label: 'Win Percentage' },
@@ -149,19 +167,27 @@ const TeamDetails = () => {
         nationals: { key: 120, label: 'Washington Nationals' },
     };
 
-    // Function to get the stats for a specific range of years
-    const getYearRangeStats = async (teamId, initialYear, finalYear) => {
+    const getAllYearRangeStats = async (initialYear, finalYear) => {
         const stats = [];
         for (let year = initialYear; year <= finalYear; year++) {
             const standingsData = await sportsAPI.getMLBStandings(year);
-            const teamData = findTeamData(standingsData, teamId);
             stats.push({
                 name: year,
-                value: teamData,
+                value: standingsData,
             });
         }
         return stats;
     };
+
+    const getTeamStatsFromAllYears = (teamId) => {
+        if (!allYearStats) return [];
+
+        return allYearStats.map(yearData => ({
+            name: yearData.name,
+            value: findTeamData(yearData.value, teamId)
+        })).filter(item => item.value !== null);
+    };
+
 
     if (loading) {
         return (
@@ -217,7 +243,6 @@ const TeamDetails = () => {
                 ← Back to Standings
             </button>
             <div className="container my-6 team-graph">
-                {/* Add dropdown for data type selection */}
                 <div className="mb-3">
                     {/* Dropdown for team selection */}
                     <label htmlFor="teamSelect" className="form-label" style={{ padding: 10 }}>Select Team:</label>
@@ -249,16 +274,34 @@ const TeamDetails = () => {
                             </option>
                         ))}
                     </select>
+
+                    {/* Dropdowns for year range selection */}
+                    <label htmlFor="startYear" className="form-label" style={{ padding: 10, marginLeft: 20 }}>Start Year:</label>
                     <select
-                        id="teamSelect"
+                        id="startYear"
                         className="form-select"
                         style={{ width: 'auto', display: 'inline-block' }}
-                        value={teamOptions}
-                        onChange={(e) => handleDataTypeChange(e.target.value)}
+                        value={startYear}
+                        onChange={(e) => setStartYear(parseInt(e.target.value))}
                     >
-                        {Object.entries(teamOptions).map(([key, option]) => (
-                            <option key={key} value={key}>
-                                {option.label}
+                        {Array.from({ length: 25 }, (_, i) => 2000 + i).map(year => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+
+                    <label htmlFor="endYear" className="form-label" style={{ padding: 10 }}>End Year:</label>
+                    <select
+                        id="endYear"
+                        className="form-select"
+                        style={{ width: 'auto', display: 'inline-block' }}
+                        value={endYear}
+                        onChange={(e) => setEndYear(parseInt(e.target.value))}
+                    >
+                        {Array.from({ length: 25 }, (_, i) => 2000 + i).map(year => (
+                            <option key={year} value={year}>
+                                {year}
                             </option>
                         ))}
                     </select>
