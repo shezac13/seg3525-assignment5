@@ -17,6 +17,7 @@ const TeamDetails = () => {
     const [allYearStats, setAllYearStats] = useState(null);
     const [startYear, setStartYear] = useState(2000);
     const [endYear, setEndYear] = useState(2024);
+    const [exclude2020, setExclude2020] = useState(true);
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -161,9 +162,15 @@ const TeamDetails = () => {
     // Function to update chart data based on year range
     const updateChartData = () => {
         if (allYearStats && teamId) {
-            const filteredStats = getTeamStatsFromAllYears(teamId).filter(
+            let filteredStats = getTeamStatsFromAllYears(teamId).filter(
                 item => item.name >= startYear && item.name <= endYear
             );
+
+            // Exclude 2020 if toggle is enabled
+            if (exclude2020) {
+                filteredStats = filteredStats.filter(item => item.name !== 2020);
+            }
+
             setChartData(filteredStats);
         }
     };
@@ -171,7 +178,7 @@ const TeamDetails = () => {
     // Update chart when year range or data type changes
     useEffect(() => {
         updateChartData();
-    }, [startYear, endYear, allYearStats, teamId]);
+    }, [startYear, endYear, allYearStats, teamId, exclude2020]);
 
     const dataTypeChartOptions = {
         winningPercentage: { key: 'value.leagueRecord.pct', label: 'Win Percentage' },
@@ -354,6 +361,24 @@ const TeamDetails = () => {
                     </select>
                 </div>
 
+                <h3 style={{ textAlign: 'center' }}>{`${teamData?.team?.name || 'Team'} ${dataTypeChartOptions[chartDataType].label} ${startYear} to ${endYear}`}</h3>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: chartWidth, paddingRight: 50 }}>
+                    {/* Switch toggle for excluding 2020 */}
+                    <div className="form-check form-switch" style={{  display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            role="switch"
+                            id="exclude2020"
+                            checked={exclude2020}
+                            onChange={(e) => setExclude2020(e.target.checked)}
+                        />
+                        <label className="form-check-label" htmlFor="exclude2020" style={{ paddingLeft: 10 }}>
+                            Exclude 2020 (COVID year)
+                        </label>
+                    </div>
+                </div>
                 <MyChart
                     className="chart"
                     data={chartData}
@@ -363,7 +388,6 @@ const TeamDetails = () => {
                     yName={dataTypeChartOptions[chartDataType].label}
                     width={chartWidth}
                     height={chartHeight}
-                    title={`${teamData?.team?.name || 'Team'} ${dataTypeChartOptions[chartDataType].label} Over Time`}
                 />
             </div>
 

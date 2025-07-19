@@ -2,7 +2,7 @@ import React from 'react';
 import {
     LineChart, Line,
     BarChart, Bar,
-    XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    XAxis, YAxis, CartesianGrid, Tooltip,
 } from 'recharts';
 
 const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 'Value', width = 800, height = 500, title = 'Chart', chartType = 'line' }) => {
@@ -34,7 +34,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
                     width={width}
                     height={height}
                     data={data}
-                    margin={{ top: 20, right: 50, left: 70, bottom: 60 }}
+                    margin={{ top: 8, right: 50, left: 70, bottom: 60 }}
                 >
                     <CartesianGrid strokeDasharray="2 2" />
                     <XAxis
@@ -45,7 +45,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
                     <YAxis
                         label={{ value: yName, angle: -90, position: 'insideLeft' }}
                         tick={{ fontSize: 16 }}
-                        interval={0} // Show all ticks
+                        interval={0}
                     />
                     <Tooltip
                         content={customTooltip}
@@ -71,7 +71,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
                     width={width}
                     height={height}
                     data={data}
-                    margin={{ top: 20, right: 50, left: 70, bottom: 60 }}
+                    margin={{ top: 8, right: 50, left: 70, bottom: 60 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -95,8 +95,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
     };
     return (
         <div className="container" style={{ width: '100%', maxWidth: '100%', height: '80%', maxHeight: '80%', margin: '0 0' }}>
-            <h3 style={{ textAlign: 'center' }}>{title}</h3>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', maxHeight: '100%'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '100%'}}>
                 {renderChart()}
             </div>
         </div>
