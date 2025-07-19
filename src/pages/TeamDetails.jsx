@@ -37,10 +37,8 @@ const TeamDetails = () => {
 
     // Calculate chart dimensions based on window size
     const getChartDimensions = () => {
-        const containerPadding = 48; // Account for container padding
-        const maxWidth = Math.min(windowSize.width - containerPadding, 1200);
-        const width = Math.max(windowSize.width * 0.7, 300); // 90% of available width, minimum 300px
-        const height = Math.max(windowSize.height * 0.6, 300); // 40% of window height, minimum 300px
+        const width = Math.max(windowSize.width * 0.7, 300);
+        const height = Math.max(windowSize.height * 0.6, 300); 
 
         return { width, height };
     };
