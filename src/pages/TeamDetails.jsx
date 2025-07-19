@@ -14,6 +14,8 @@ const TeamDetails = () => {
     const [error, setError] = useState(null);
     const [chartData, setChartData] = useState();
     const [chartDataType, setChartDataType] = useState('wins');
+    const [secondaryChartDataType, setSecondaryChartDataType] = useState('');
+    const [showDualChart, setShowDualChart] = useState(false);
     const [allYearStats, setAllYearStats] = useState(null);
     const [startYear, setStartYear] = useState(2000);
     const [endYear, setEndYear] = useState(2024);
@@ -160,7 +162,35 @@ const TeamDetails = () => {
         setChartDataType(type);
     };
 
-    // Function to update chart data based on year range
+    // Function to handle secondary data type switching
+    const handleSecondaryDataTypeChange = (type) => {
+        setSecondaryChartDataType(type);
+    };
+
+    // Function to toggle dual chart mode
+    const handleDualChartToggle = (enabled) => {
+        setShowDualChart(enabled);
+        if (!enabled) {
+            setSecondaryChartDataType('');
+        }
+    };
+
+    // Function to handle game type switching
+    const handleGameTypeChange = (type) => {
+        setGameType(type);
+        // Reset chart data type to first available option for the new game type
+        const availableOptions = Object.keys(dataTypeChartOptions[type]);
+        if (!availableOptions.includes(chartDataType)) {
+            setChartDataType(availableOptions[0]);
+        }
+    };
+
+    // Get current data type options based on selected game type
+    const getCurrentDataTypeOptions = () => {
+        return dataTypeChartOptions[gameType] || dataTypeChartOptions.all;
+    };
+
+    // Function to update chart data based on year range and game type
     const updateChartData = () => {
         if (allYearStats && teamId) {
             let filteredStats = getTeamStatsFromAllYears(teamId).filter(
@@ -365,6 +395,44 @@ const TeamDetails = () => {
                         ))}
                     </select>
 
+                    {/* Toggle for dual chart mode */}
+                    <div className="form-check form-switch" style={{ display: 'inline-block', marginLeft: 20 }}>
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            role="switch"
+                            id="dualChartToggle"
+                            checked={showDualChart}
+                            onChange={(e) => handleDualChartToggle(e.target.checked)}
+                        />
+                        <label className="form-check-label" htmlFor="dualChartToggle" style={{ paddingLeft: 5 }}>
+                            Compare Two Statistics
+                        </label>
+                    </div>
+
+                    {/* Second statistic dropdown (only shown when dual chart is enabled) */}
+                    {showDualChart && (
+                        <>
+                            <label htmlFor="secondaryDataTypeSelect" className="form-label" style={{ padding: 10 }}>Second Statistic:</label>
+                            <select
+                                id="secondaryDataTypeSelect"
+                                className="form-select"
+                                style={{ width: 'auto', display: 'inline-block' }}
+                                value={secondaryChartDataType}
+                                onChange={(e) => handleSecondaryDataTypeChange(e.target.value)}
+                            >
+                                <option value="">Select second statistic...</option>
+                                {Object.entries(getCurrentDataTypeOptions())
+                                    .filter(([key]) => key !== chartDataType) // Don't show the same option as primary
+                                    .map(([key, option]) => (
+                                        <option key={key} value={key}>
+                                            {option.title}
+                                        </option>
+                                    ))}
+                            </select>
+                        </>
+                    )}
+
                     {/* Dropdowns for year range selection */}
                     <label htmlFor="startYear" className="form-label" style={{ padding: 10, marginLeft: 20 }}>Start Year:</label>
                     <select
@@ -397,7 +465,9 @@ const TeamDetails = () => {
                     </select>
                 </div>
 
-                <h3 style={{ textAlign: 'center' }}>{`${teamData?.team?.name || 'Team'} ${dataTypeChartOptions[chartDataType].label} ${startYear} to ${endYear}`}</h3>
+                <h3 style={{ textAlign: 'center' }}>
+                    {`${teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title}${showDualChart && secondaryChartDataType ? ` vs ${getCurrentDataTypeOptions()[secondaryChartDataType]?.title}` : ''} ${startYear} to ${endYear}`}
+                </h3>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>
                     {/* Game type selection dropdown */}
