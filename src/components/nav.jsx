@@ -10,7 +10,7 @@ function NAV() {
 
     // Update current page based on the current route
     useEffect(() => {
-        if (location.pathname === '/seg3525-assignment5/' || location.pathname.startsWith('/team')) {
+        if (location.pathname === '/seg3525-assignment5/' || location.pathname.startsWith('/seg3525-assignment5/mlb')) {
             setCurrentPage('mlb');
         } else if (location.pathname === '/nhl') {
             setCurrentPage('nhl');

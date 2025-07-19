@@ -23,7 +23,7 @@ function App() {
         <Routes>
           <Route path="/seg3525-assignment5/mlb" element={<MLB />} />
           <Route path="/seg3525-assignment5/nhl" element={<NHL />} />
-          <Route path="/seg3525-assignment5/team/:teamId" element={<TeamDetails />} />
+          <Route path="/seg3525-assignment5/mlb/team/:teamName" element={<TeamDetails />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

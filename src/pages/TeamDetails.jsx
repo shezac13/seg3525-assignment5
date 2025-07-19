@@ -7,7 +7,7 @@ import { setCookie, getCookie } from '../utils/cookies.js';
 import './TeamDetails.css';
 
 const TeamDetails = () => {
-    const { teamId } = useParams();
+    const { teamName } = useParams();
     const navigate = useNavigate();
     const [teamData, setTeamData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -105,10 +105,17 @@ const TeamDetails = () => {
         const fetchTeamData = async () => {
             try {
                 setLoading(true);
+                const teamId = getTeamIdByName(teamName);
+
+                if (!teamId) {
+                    setError('Invalid team name');
+                    return;
+                }
+
                 const standingsData = await sportsAPI.getMLBStandings();
 
                 let foundTeam = null;
-                foundTeam = findTeamData(standingsData, teamId);
+                foundTeam = findTeamData(standingsData, teamId.toString());
 
                 if (foundTeam) {
                     setTeamData(foundTeam);
@@ -138,10 +145,10 @@ const TeamDetails = () => {
             }
         };
 
-        if (teamId) {
+        if (teamName) {
             fetchTeamData();
         }
-    }, [teamId]);
+    }, [teamName]);
 
     const getDivisionName = (divisionId) => {
         const divisionMap = {
@@ -177,24 +184,27 @@ const TeamDetails = () => {
 
     // Function to update chart data based on year range and game type
     const updateChartData = () => {
-        if (allYearStats && teamId) {
-            let filteredStats = getTeamStatsFromAllYears(teamId).filter(
-                item => item.name >= startYear && item.name <= endYear
-            );
+        if (allYearStats && teamName) {
+            const teamId = getTeamIdByName(teamName);
+            if (teamId) {
+                let filteredStats = getTeamStatsFromAllYears(teamId.toString()).filter(
+                    item => item.name >= startYear && item.name <= endYear
+                );
 
-            // Exclude 2020 if toggle is enabled
-            if (exclude2020) {
-                filteredStats = filteredStats.filter(item => item.name !== 2020);
+                // Exclude 2020 if toggle is enabled
+                if (exclude2020) {
+                    filteredStats = filteredStats.filter(item => item.name !== 2020);
+                }
+
+                setChartData(filteredStats);
             }
-
-            setChartData(filteredStats);
         }
     };
 
     // Update chart when year range, game type, or exclude2020 changes
     useEffect(() => {
         updateChartData();
-    }, [startYear, endYear, allYearStats, teamId, gameType, exclude2020]);
+    }, [startYear, endYear, allYearStats, teamName, gameType, exclude2020]);
 
     const dataTypeChartOptions = {
         all: {
@@ -271,6 +281,22 @@ const TeamDetails = () => {
         bluejays: { key: 141, label: 'Toronto Blue Jays' },
         nationals: { key: 120, label: 'Washington Nationals' },
     };
+
+    // Create reverse lookup: teamId -> teamName and teamId -> teamInfo
+    const teamIdToName = Object.fromEntries(
+        Object.entries(teamOptions).map(([name, info]) => [info.key, name])
+    );
+
+    const teamIdToInfo = Object.fromEntries(
+        Object.entries(teamOptions).map(([name, info]) => [info.key, { name, ...info }])
+    );
+
+    // Helper functions to get team information by ID or name
+    const getTeamNameById = (teamId) => teamIdToName[parseInt(teamId)];
+    const getTeamInfoById = (teamId) => teamIdToInfo[parseInt(teamId)];
+    const getTeamLabelById = (teamId) => teamIdToInfo[parseInt(teamId)]?.label;
+    const getTeamIdByName = (teamName) => teamOptions[teamName]?.key;
+    const getTeamLabelByName = (teamName) => teamOptions[teamName]?.label;
 
     const getAllYearRangeStats = async (initialYear, finalYear) => {
         const stats = [];
@@ -355,11 +381,11 @@ const TeamDetails = () => {
                         id="teamSelect"
                         className="form-select"
                         style={{ width: 'auto', display: 'inline-block' }}
-                        value={teamId}
-                        onChange={(e) => navigate(`/seg3525-assignment5/team/${e.target.value}`)}
+                        value={teamName}
+                        onChange={(e) => navigate(`/seg3525-assignment5/mlb/team/${e.target.value}`)}
                     >
-                        {Object.entries(teamOptions).map(([key, option]) => (
-                            <option key={option.key} value={option.key}>
+                        {Object.entries(teamOptions).map(([name, option]) => (
+                            <option key={name} value={name}>
                                 {option.label}
                             </option>
                         ))}
@@ -413,7 +439,7 @@ const TeamDetails = () => {
                 </div>
 
                 <h3 style={{ textAlign: 'center' }}>
-                    {`${teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} to ${endYear}`}
+                    {`${getTeamLabelByName(teamName) || teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} to ${endYear}`}
                 </h3>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>

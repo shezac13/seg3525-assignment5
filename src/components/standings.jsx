@@ -9,6 +9,18 @@ const Standings = () => {
     const [error, setError] = useState(null);
     const [dataType, setDataType] = useState('mlb');
 
+    // Team ID to name mapping (same as in TeamDetails)
+    const teamIdToName = {
+        109: 'diamondbacks', 144: 'braves', 110: 'orioles', 111: 'redsox',
+        112: 'cubs', 145: 'whiteSox', 113: 'reds', 114: 'guardians',
+        115: 'rockies', 116: 'tigers', 117: 'astros', 118: 'royals',
+        108: 'angels', 119: 'dodgers', 146: 'marlins', 158: 'brewers',
+        142: 'twins', 121: 'mets', 147: 'yankees', 133: 'athletics',
+        143: 'phillies', 134: 'pirates', 135: 'padres', 137: 'giants',
+        136: 'mariners', 138: 'cardinals', 139: 'rays', 140: 'rangers',
+        141: 'bluejays', 120: 'nationals'
+    };
+
     // Function to get division name from division ID
     const getDivisionName = (divisionId) => {
         const divisionMap = {
@@ -116,7 +128,7 @@ const Standings = () => {
                                     <tr key={`${divIndex}-${teamIndex}`}>
                                         <td>
                                             <Link
-                                                to={`/seg3525-assignment5/team/${team.team.id}`}
+                                                to={`/seg3525-assignment5/mlb/team/${teamIdToName[team.team.id] || team.team.id}`}
                                             >
                                                 <strong>{team.team.name}</strong>
                                             </Link>
