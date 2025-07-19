@@ -160,7 +160,22 @@ const TeamDetails = () => {
         setChartDataType(type);
     };
 
-    // Function to update chart data based on year range
+    // Function to handle game type switching
+    const handleGameTypeChange = (type) => {
+        setGameType(type);
+        // Reset chart data type to first available option for the new game type
+        const availableOptions = Object.keys(dataTypeChartOptions[type]);
+        if (!availableOptions.includes(chartDataType)) {
+            setChartDataType(availableOptions[0]);
+        }
+    };
+
+    // Get current data type options based on selected game type
+    const getCurrentDataTypeOptions = () => {
+        return dataTypeChartOptions[gameType] || dataTypeChartOptions.all;
+    };
+
+    // Function to update chart data based on year range and game type
     const updateChartData = () => {
         if (allYearStats && teamId) {
             let filteredStats = getTeamStatsFromAllYears(teamId).filter(
@@ -397,7 +412,9 @@ const TeamDetails = () => {
                     </select>
                 </div>
 
-                <h3 style={{ textAlign: 'center' }}>{`${teamData?.team?.name || 'Team'} ${dataTypeChartOptions[chartDataType].label} ${startYear} to ${endYear}`}</h3>
+                <h3 style={{ textAlign: 'center' }}>
+                    {`${teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} to ${endYear}`}
+                </h3>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>
                     {/* Game type selection dropdown */}
