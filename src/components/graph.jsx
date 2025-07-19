@@ -5,7 +5,7 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip,
 } from 'recharts';
 
-const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 'Value', width = 800, height = 500, title = 'Chart', chartType = 'line' }) => {
+const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', yName = 'Value', yName2, width = 800, height = 500, chartType = 'line' }) => {
     const customTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
@@ -17,9 +17,11 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
                     <p style={{ margin: 0, fontWeight: 'bold' }}>{`${label}`}</p>
-                    <p style={{ margin: 0, color: '#8884d8' }}>
-                        {`${yName}: ${payload[0].value}`}
+                    {payload.map((entry, index) => (
+                        <p key={index} style={{ margin: 0, color: entry.color }}>
+                            {`${entry.name}: ${entry.value}`}
                     </p>
+                    ))}
                 </div>
             );
         }
@@ -60,7 +62,19 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
                         strokeWidth={2}
                         dot={{ r: 3 }}
                         activeDot={{ r: 4 }}
+                        name={yName}
                     />
+                    {yKey2 && (
+                        <Line
+                            type="linear"
+                            dataKey={yKey2}
+                            stroke="#ff7c7c"
+                            strokeWidth={2}
+                            dot={{ r: 3 }}
+                            activeDot={{ r: 4 }}
+                            name={yName2 || 'Second Line'}
+                    />
+                    )}
 
                 </LineChart>
             );
@@ -95,7 +109,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', xName = 'Year', yName = 
     };
     return (
         <div className="container" style={{ width: '100%', maxWidth: '100%', height: '80%', maxHeight: '80%', margin: '0 0' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '100%'}}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '100%' }}>
                 {renderChart()}
             </div>
         </div>

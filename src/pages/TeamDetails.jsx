@@ -18,6 +18,7 @@ const TeamDetails = () => {
     const [startYear, setStartYear] = useState(2000);
     const [endYear, setEndYear] = useState(2024);
     const [exclude2020, setExclude2020] = useState(true);
+    const [gameType, setGameType] = useState('all');
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight
@@ -175,17 +176,52 @@ const TeamDetails = () => {
         }
     };
 
-    // Update chart when year range or data type changes
+    // Update chart when year range, game type, or exclude2020 changes
     useEffect(() => {
         updateChartData();
-    }, [startYear, endYear, allYearStats, teamId, exclude2020]);
+    }, [startYear, endYear, allYearStats, teamId, gameType, exclude2020]);
 
     const dataTypeChartOptions = {
-        winningPercentage: { key: 'value.leagueRecord.pct', label: 'Win Percentage' },
-        wins: { key: 'value.wins', label: 'Wins' },
-        losses: { key: 'value.losses', label: 'Losses' },
-        runDifferential: { key: 'value.runDifferential', label: 'Run Differential' },
-        divisionRank: { key: 'value.divisionRank', label: 'Division Rank' }
+        all: {
+            winningPercentage: { key: 'value.winningPercentage', label: 'Win Percentage', title: 'Win Percentage' },
+            wins: { key: 'value.wins', label: 'Wins', title: 'Wins' },
+            losses: { key: 'value.losses', label: 'Losses', title: 'Losses' },
+            runDifferential: { key: 'value.runDifferential', label: 'Run Differential', title: 'Run Differential' },
+            divisionRank: { key: 'value.divisionRank', label: 'Division Rank', title: 'Division Rank' },
+        },
+        home: {
+            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: 'Home Win Percentage', title: 'Win Percentage' },
+            wins: { key: 'value.records.splitRecords[0].wins', label: 'Home Wins', title: 'Wins' },
+            losses: { key: 'value.records.splitRecords[0].losses', label: 'Home Losses', title: 'Losses' },
+        },
+        away: {
+            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: 'Away Win Percentage', title: 'Win Percentage' },
+            wins: { key: 'value.records.splitRecords[1].wins', label: 'Away Wins', title: 'Wins' },
+            losses: { key: 'value.records.splitRecords[1].losses', label: 'Away Losses', title: 'Losses' },
+        },
+        homevsaway: {
+            winningPercentage: {
+                key: 'value.records.splitRecords[0].pct',
+                label: 'Home Win Percentage',
+                key2: 'value.records.splitRecords[1].pct',
+                label2: 'Away Win Percentage',
+                title: 'Win Percentage'
+            },
+            wins: {
+                key: 'value.records.splitRecords[0].wins',
+                label: 'Home Wins',
+                key2: 'value.records.splitRecords[1].wins',
+                label2: 'Away Wins',
+                title: 'Wins'
+            },
+            losses: {
+                key: 'value.records.splitRecords[0].losses',
+                label: 'Home Losses',
+                key2: 'value.records.splitRecords[1].losses',
+                label2: 'Away Losses',
+                title: 'Losses'
+            },
+        },
     };
 
     const teamOptions = {
@@ -322,9 +358,9 @@ const TeamDetails = () => {
                         value={chartDataType}
                         onChange={(e) => handleDataTypeChange(e.target.value)}
                     >
-                        {Object.entries(dataTypeChartOptions).map(([key, option]) => (
+                        {Object.entries(getCurrentDataTypeOptions()).map(([key, option]) => (
                             <option key={key} value={key}>
-                                {option.label}
+                                {option.title}
                             </option>
                         ))}
                     </select>
@@ -363,9 +399,25 @@ const TeamDetails = () => {
 
                 <h3 style={{ textAlign: 'center' }}>{`${teamData?.team?.name || 'Team'} ${dataTypeChartOptions[chartDataType].label} ${startYear} to ${endYear}`}</h3>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: chartWidth, paddingRight: 50 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>
+                    {/* Game type selection dropdown */}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <select
+                            id="gameTypeSelect"
+                            className="form-select"
+                            style={{ width: 'auto', display: 'inline-block' }}
+                            value={gameType}
+                            onChange={(e) => handleGameTypeChange(e.target.value)}
+                        >
+                            <option value="all">All Games</option>
+                            <option value="home">Home</option>
+                            <option value="away">Away</option>
+                            <option value="homevsaway">Home vs. Away</option>
+                        </select>
+                    </div>
+
                     {/* Switch toggle for excluding 2020 */}
-                    <div className="form-check form-switch" style={{  display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <div className="form-check form-switch" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <input
                             className="form-check-input"
                             type="checkbox"
@@ -384,8 +436,10 @@ const TeamDetails = () => {
                     data={chartData}
                     xKey="name"
                     xName="Year"
-                    yKey={dataTypeChartOptions[chartDataType].key}
-                    yName={dataTypeChartOptions[chartDataType].label}
+                    yKey={getCurrentDataTypeOptions()[chartDataType]?.key}
+                    yName={getCurrentDataTypeOptions()[chartDataType]?.label}
+                    yKey2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.key2 : null}
+                    yName2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.label2 : null}
                     width={chartWidth}
                     height={chartHeight}
                 />
