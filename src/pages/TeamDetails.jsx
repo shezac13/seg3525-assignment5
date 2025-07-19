@@ -49,7 +49,7 @@ const TeamDetails = () => {
 
     // Cookie management functions for allYearStats
     const COOKIE_NAME = 'mlb_stats_2000_2024';
-    const COOKIE_EXPIRY_DAYS = 7; // Cache for 7 days as the values are from previous years
+    const COOKIE_EXPIRY_DAYS = 30; // Cache for 30 days as the values are from previous years
 
     const saveStatsToCache = (stats) => {
         try {
