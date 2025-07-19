@@ -198,30 +198,23 @@ const TeamDetails = () => {
 
     const dataTypeChartOptions = {
         all: {
-            winningPercentage: { key: 'value.winningPercentage', label: 'Win Percentage', title: 'Win Percentage' },
             wins: { key: 'value.wins', label: 'Wins', title: 'Wins' },
             losses: { key: 'value.losses', label: 'Losses', title: 'Losses' },
+            winningPercentage: { key: 'value.winningPercentage', label: 'Win Percentage', title: 'Win Percentage' },
             runDifferential: { key: 'value.runDifferential', label: 'Run Differential', title: 'Run Differential' },
             divisionRank: { key: 'value.divisionRank', label: 'Division Rank', title: 'Division Rank' },
         },
         home: {
-            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: 'Home Win Percentage', title: 'Win Percentage' },
             wins: { key: 'value.records.splitRecords[0].wins', label: 'Home Wins', title: 'Wins' },
             losses: { key: 'value.records.splitRecords[0].losses', label: 'Home Losses', title: 'Losses' },
+            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: 'Home Win Percentage', title: 'Win Percentage' },
         },
         away: {
-            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: 'Away Win Percentage', title: 'Win Percentage' },
             wins: { key: 'value.records.splitRecords[1].wins', label: 'Away Wins', title: 'Wins' },
             losses: { key: 'value.records.splitRecords[1].losses', label: 'Away Losses', title: 'Losses' },
+            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: 'Away Win Percentage', title: 'Win Percentage' },
         },
         homevsaway: {
-            winningPercentage: {
-                key: 'value.records.splitRecords[0].pct',
-                label: 'Home Win Percentage',
-                key2: 'value.records.splitRecords[1].pct',
-                label2: 'Away Win Percentage',
-                title: 'Win Percentage'
-            },
             wins: {
                 key: 'value.records.splitRecords[0].wins',
                 label: 'Home Wins',
@@ -235,6 +228,13 @@ const TeamDetails = () => {
                 key2: 'value.records.splitRecords[1].losses',
                 label2: 'Away Losses',
                 title: 'Losses'
+            },
+            winningPercentage: {
+                key: 'value.records.splitRecords[0].pct',
+                label: 'Home Win Percentage',
+                key2: 'value.records.splitRecords[1].pct',
+                label2: 'Away Win Percentage',
+                title: 'Win Percentage'
             },
         },
     };
