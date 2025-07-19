@@ -219,6 +219,22 @@ const TeamDetails = () => {
             <div className="container my-6 team-graph">
                 {/* Add dropdown for data type selection */}
                 <div className="mb-3">
+                    {/* Dropdown for team selection */}
+                    <label htmlFor="teamSelect" className="form-label" style={{ padding: 10 }}>Select Team:</label>
+                    <select
+                        id="teamSelect"
+                        className="form-select"
+                        style={{ width: 'auto', display: 'inline-block' }}
+                        value={teamId}
+                        onChange={(e) => navigate(`/seg3525-assignment5/team/${e.target.value}`)}
+                    >
+                        {Object.entries(teamOptions).map(([key, option]) => (
+                            <option key={option.key} value={option.key}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+                    {/* Dropdown for data type selection */}
                     <label htmlFor="dataTypeSelect" className="form-label" style={{ padding: 10 }}>Select Statistic:</label>
                     <select
                         id="dataTypeSelect"
