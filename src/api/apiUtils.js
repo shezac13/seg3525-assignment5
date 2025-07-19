@@ -53,7 +53,7 @@ export const post = (url, data) =>
 
 // Specific API endpoints for your sports data
 export const sportsAPI = {
-    getMLBStandings: () => get('https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2025&standingsTypes=regularSeason'),
-    getMLBALStandings: () => get('https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=2025&standingsTypes=regularSeason'),
-    getMLBNLStandings: () => get('https://statsapi.mlb.com/api/v1/standings?leagueId=104&season=2025&standingsTypes=regularSeason'),
+    getMLBStandings: (year='2025') => get(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${year}&standingsTypes=regularSeason`),
+    getMLBALStandings: (year='2025') => get(`https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=${year}&standingsTypes=regularSeason`),
+    getMLBNLStandings: (year='2025') => get(`https://statsapi.mlb.com/api/v1/standings?leagueId=104&season=${year}&standingsTypes=regularSeason`),
 };

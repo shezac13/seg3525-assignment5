@@ -3,6 +3,9 @@
   margin: 0 auto;
   text-align: center;
 }
+.app {
+  height: 85px;
+}
 
 .logo {
   height: 6em;

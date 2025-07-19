@@ -40,3 +40,20 @@
 .division table th {
     border-bottom: none;
 }
+
+/* Team link styling */
+.division table td a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.division table td a:hover {
+    color: #004499;
+    text-decoration: underline;
+}
+
+.division table td a strong {
+    font-weight: bold;
+}
+

@@ -1,0 +1,22 @@
+.loading-container p {
+    padding: 0px 10px 0px 10px;
+    font-size: 1.2rem;
+}
+
+.team-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 100%;
+    height: 90vh;
+    max-height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.chart {
+    width: 100%;
+    height: 100%;
+}
