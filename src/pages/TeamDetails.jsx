@@ -181,22 +181,91 @@ const TeamDetails = () => {
 
     const dataTypeChartOptions = {
         all: {
-            wins: { key: 'value.wins', label: t('teamDetails.wins'), title: t('teamDetails.wins') , graphType: 'line'},
-            losses: { key: 'value.losses', label: t('teamDetails.losses'), title: t('teamDetails.losses'), graphType: 'line' },
-            winningPercentage: { key: 'value.winningPercentage', label: t('teamDetails.winPercentage'), title: t('teamDetails.winPercentage'), graphType: 'line' },
-            runDifferential: { key: 'value.runDifferential', label: t('teamDetails.runDifference'), title: t('teamDetails.runDifference'), graphType: 'line' },
-            divisionRank: { key: 'value.divisionRank', label: t('teamDetails.divisionRank'), title: t('teamDetails.divisionRank'), graphType: 'line' },
+            wins: {
+                key: 'value.wins',
+                label: t('teamDetails.wins'),
+                title: t('teamDetails.wins'),
+                graphTitle: t('teamDetails.wins'),
+                graphType: 'line'
+            },
+            losses: {
+                key: 'value.losses',
+                label: t('teamDetails.losses'),
+                title: t('teamDetails.losses'),
+                graphTitle: t('teamDetails.losses'),
+                graphType: 'line'
+            },
+            winningPercentage: {
+                key: 'value.winningPercentage',
+                label: t('teamDetails.winPercentage'),
+                title: t('teamDetails.winPercentage'),
+                graphTitle: t('teamDetails.winPercentage'),
+                graphType: 'line'
+            },
+            runDifferential: {
+                key: 'value.runDifferential',
+                label: t('teamDetails.runDifference'),
+                title: t('teamDetails.runDifference'),
+                graphTitle: t('teamDetails.runDifference'),
+                graphType: 'line'
+            },
+            divisionRank: {
+                key: 'value.divisionRank',
+                label: t('teamDetails.divisionRank'),
+                title: t('teamDetails.divisionRank'),
+                graphTitle: t('teamDetails.divisionRank'),
+                graphType: 'line'
+            },
         },
+
         home: {
-            wins: { key: 'value.records.splitRecords[0].wins', label: t('teamDetails.homeWins'), title: t('teamDetails.wins'), graphType: 'line' },
-            losses: { key: 'value.records.splitRecords[0].losses', label: t('teamDetails.homeLosses'), title: t('teamDetails.losses'), graphType: 'line' },
-            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: t('teamDetails.homeWinPercentage'), title: t('teamDetails.winPercentage'), graphType: 'line' },
+            wins: {
+                key: 'value.records.splitRecords[0].wins',
+                label: t('teamDetails.homeWins'),
+                title: t('teamDetails.wins'),
+                graphTitle: t('teamDetails.wins'),
+                graphType: 'line'
+            },
+            losses: {
+                key: 'value.records.splitRecords[0].losses',
+                label: t('teamDetails.homeLosses'),
+                title: t('teamDetails.losses'),
+                graphTitle: t('teamDetails.losses'),
+                graphType: 'line'
+            },
+            winningPercentage: {
+                key: 'value.records.splitRecords[0].pct',
+                label: t('teamDetails.homeWinPercentage'),
+                title: t('teamDetails.winPercentage'),
+                graphTitle: t('teamDetails.winPercentage'),
+                graphType: 'line'
+            },
         },
+
         away: {
-            wins: { key: 'value.records.splitRecords[1].wins', label: t('teamDetails.awayWins'), title: t('teamDetails.wins'), graphType: 'line' },
-            losses: { key: 'value.records.splitRecords[1].losses', label: t('teamDetails.awayLosses'), title: t('teamDetails.losses'), graphType: 'line' },
-            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: t('teamDetails.awayWinPercentage'), title: t('teamDetails.winPercentage'), graphType: 'line' },
+            wins: {
+                key: 'value.records.splitRecords[1].wins',
+                label: t('teamDetails.awayWins'),
+                title: t('teamDetails.wins'),
+                graphTitle: t('teamDetails.wins'),
+                graphType: 'line'
+            },
+            losses: {
+                key: 'value.records.splitRecords[1].losses',
+                label: t('teamDetails.awayLosses'),
+                title: t('teamDetails.losses'),
+                graphTitle: t('teamDetails.losses'),
+                graphType: 'line'
+            },
+            winningPercentage: {
+                key: 'value.records.splitRecords[1].pct',
+                label: t('teamDetails.awayWinPercentage'),
+                title: t('teamDetails.winPercentage'),
+                graphTitle: t('teamDetails.winPercentage'),
+                graphType: 'line'
+            },
         },
+
         homevsaway: {
             wins: {
                 key: 'value.records.splitRecords[0].wins',
@@ -204,6 +273,7 @@ const TeamDetails = () => {
                 key2: 'value.records.splitRecords[1].wins',
                 label2: t('teamDetails.awayWins'),
                 title: t('teamDetails.wins'),
+                graphTitle: t('teamDetails.wins') + ' (' + t('teamDetails.homeVsAway') + ')',
                 graphType: 'bar',
             },
             losses: {
@@ -212,6 +282,7 @@ const TeamDetails = () => {
                 key2: 'value.records.splitRecords[1].losses',
                 label2: t('teamDetails.awayLosses'),
                 title: t('teamDetails.losses'),
+                graphTitle: t('teamDetails.losses') + ' (' + t('teamDetails.homeVsAway') + ')',
                 graphType: 'bar',
             },
             winningPercentage: {
@@ -220,6 +291,7 @@ const TeamDetails = () => {
                 key2: 'value.records.splitRecords[1].pct',
                 label2: t('teamDetails.awayWinPercentage'),
                 title: t('teamDetails.winPercentage'),
+                graphTitle: t('teamDetails.winPercentage') + ' (' + t('teamDetails.homeVsAway') + ')',
                 graphType: 'bar',
             },
         },
@@ -416,7 +488,7 @@ const TeamDetails = () => {
                 </div>
 
                 <h3 style={{ textAlign: 'center' }}>
-                    {`${getTeamLabelByName(teamName) || teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} ${t('common.rangeTo')} ${endYear}`}
+                    {`${getTeamLabelByName(teamName) || teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.graphTitle} - ${startYear} ${t('common.rangeTo')} ${endYear}`}
                 </h3>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>
