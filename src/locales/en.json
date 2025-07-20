@@ -4,6 +4,7 @@
     "mlb": "All MLB",
     "americanLeague": "American League",
     "nationalLeague": "National League",
+    "gamesPlayed": "Games Played",
     "wins": "Wins",
     "losses": "Losses",
     "winPercentage": "Win %",

@@ -136,6 +136,7 @@ const Standings = () => {
                             <thead className="table-header">
                                 <tr>
                                     <th>{getDivisionName(division.division.id)}</th>
+                                    <th>{t('standings.gamesPlayed')}</th>
                                     <th>{t('standings.wins')}</th>
                                     <th>{t('standings.losses')}</th>
                                     <th>{t('standings.winPercentage')}</th>
@@ -153,6 +154,7 @@ const Standings = () => {
                                                 <strong>{team.team.name}</strong>
                                             </Link>
                                         </td>
+                                        <td>{team.gamesPlayed}</td>
                                         <td>{team.wins}</td>
                                         <td>{team.losses}</td>
                                         <td>{team.winningPercentage}</td>
