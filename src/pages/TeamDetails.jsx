@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { sportsAPI } from '../api/apiUtils.js';
 import MyChart from '../components/graph.jsx';
 import { setCookie, getCookie } from '../utils/cookies.js';
@@ -7,6 +8,7 @@ import { setCookie, getCookie } from '../utils/cookies.js';
 import './TeamDetails.css';
 
 const TeamDetails = () => {
+    const { t } = useTranslation();
     const { teamName } = useParams();
     const navigate = useNavigate();
     const [teamData, setTeamData] = useState(null);
@@ -108,7 +110,7 @@ const TeamDetails = () => {
                 const teamId = getTeamIdByName(teamName);
 
                 if (!teamId) {
-                    setError('Invalid team name');
+                    setError(t('common.invalidTeamName'));
                     return;
                 }
 
@@ -135,10 +137,10 @@ const TeamDetails = () => {
                         saveStatsToCache(allStats);
                     }
                 } else {
-                    setError('Team not found');
+                    setError(t('common.teamNotFound'));
                 }
             } catch (err) {
-                setError('Failed to load team data');
+                setError(t('common.failedToLoadTeamData'));
                 console.error('Error fetching team data:', err);
             } finally {
                 setLoading(false);
@@ -152,14 +154,14 @@ const TeamDetails = () => {
 
     const getDivisionName = (divisionId) => {
         const divisionMap = {
-            200: "American League West",
-            201: "American League East",
-            202: "American League Central",
-            203: "National League West",
-            204: "National League East",
-            205: "National League Central"
+            200: t('divisions.americanLeagueWest'),
+            201: t('divisions.americanLeagueEast'),
+            202: t('divisions.americanLeagueCentral'),
+            203: t('divisions.nationalLeagueWest'),
+            204: t('divisions.nationalLeagueEast'),
+            205: t('divisions.nationalLeagueCentral')
         };
-        return divisionMap[divisionId] || `Division ${divisionId}`;
+        return divisionMap[divisionId] || t('divisions.division', { id: divisionId });
     };
 
     // Function to handle data type switching
@@ -208,43 +210,43 @@ const TeamDetails = () => {
 
     const dataTypeChartOptions = {
         all: {
-            wins: { key: 'value.wins', label: 'Wins', title: 'Wins' },
-            losses: { key: 'value.losses', label: 'Losses', title: 'Losses' },
-            winningPercentage: { key: 'value.winningPercentage', label: 'Win Percentage', title: 'Win Percentage' },
-            runDifferential: { key: 'value.runDifferential', label: 'Run Differential', title: 'Run Differential' },
-            divisionRank: { key: 'value.divisionRank', label: 'Division Rank', title: 'Division Rank' },
+            wins: { key: 'value.wins', label: t('teamDetails.wins'), title: t('teamDetails.wins') },
+            losses: { key: 'value.losses', label: t('teamDetails.losses'), title: t('teamDetails.losses') },
+            winningPercentage: { key: 'value.winningPercentage', label: t('teamDetails.winPercentage'), title: t('teamDetails.winPercentage') },
+            runDifferential: { key: 'value.runDifferential', label: t('teamDetails.runDifference'), title: t('teamDetails.runDifference') },
+            divisionRank: { key: 'value.divisionRank', label: t('teamDetails.divisionRank'), title: t('teamDetails.divisionRank') },
         },
         home: {
-            wins: { key: 'value.records.splitRecords[0].wins', label: 'Home Wins', title: 'Wins' },
-            losses: { key: 'value.records.splitRecords[0].losses', label: 'Home Losses', title: 'Losses' },
-            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: 'Home Win Percentage', title: 'Win Percentage' },
+            wins: { key: 'value.records.splitRecords[0].wins', label: t('teamDetails.homeWins'), title: t('teamDetails.wins') },
+            losses: { key: 'value.records.splitRecords[0].losses', label: t('teamDetails.homeLosses'), title: t('teamDetails.losses') },
+            winningPercentage: { key: 'value.records.splitRecords[0].pct', label: t('teamDetails.homeWinPercentage'), title: t('teamDetails.winPercentage') },
         },
         away: {
-            wins: { key: 'value.records.splitRecords[1].wins', label: 'Away Wins', title: 'Wins' },
-            losses: { key: 'value.records.splitRecords[1].losses', label: 'Away Losses', title: 'Losses' },
-            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: 'Away Win Percentage', title: 'Win Percentage' },
+            wins: { key: 'value.records.splitRecords[1].wins', label: t('teamDetails.awayWins'), title: t('teamDetails.wins') },
+            losses: { key: 'value.records.splitRecords[1].losses', label: t('teamDetails.awayLosses'), title: t('teamDetails.losses') },
+            winningPercentage: { key: 'value.records.splitRecords[1].pct', label: t('teamDetails.awayWinPercentage'), title: t('teamDetails.winPercentage') },
         },
         homevsaway: {
             wins: {
                 key: 'value.records.splitRecords[0].wins',
-                label: 'Home Wins',
+                label: t('teamDetails.homeWins'),
                 key2: 'value.records.splitRecords[1].wins',
-                label2: 'Away Wins',
-                title: 'Wins'
+                label2: t('teamDetails.awayWins'),
+                title: t('teamDetails.wins'),
             },
             losses: {
                 key: 'value.records.splitRecords[0].losses',
-                label: 'Home Losses',
+                label: t('teamDetails.homeLosses'),
                 key2: 'value.records.splitRecords[1].losses',
-                label2: 'Away Losses',
-                title: 'Losses'
+                label2: t('teamDetails.awayLosses'),
+                title: t('teamDetails.losses'),
             },
             winningPercentage: {
                 key: 'value.records.splitRecords[0].pct',
-                label: 'Home Win Percentage',
+                label: t('teamDetails.homeWinPercentage'),
                 key2: 'value.records.splitRecords[1].pct',
-                label2: 'Away Win Percentage',
-                title: 'Win Percentage'
+                label2: t('teamDetails.awayWinPercentage'),
+                title: t('teamDetails.winPercentage'),
             },
         },
     };
@@ -324,9 +326,9 @@ const TeamDetails = () => {
         return (
             <div className="container text-center my-5 loading-container">
                 <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">{t('common.loading')}</span>
                 </div>
-                <p className="mt-3">Loading team details...</p>
+                <p className="mt-3">{t('teamDetails.loadingTeamDetails')}</p>
             </div>
         );
     }
@@ -335,13 +337,13 @@ const TeamDetails = () => {
         return (
             <div className="container my-5">
                 <div className="alert alert-danger" role="alert">
-                    <h4 className="alert-heading">Error!</h4>
+                    <h4 className="alert-heading">{t('common.error')}</h4>
                     <p>{error}</p>
                     <button
                         className="btn btn-outline-danger"
                         onClick={() => navigate('/seg3525-assignment5/mlb/')}
                     >
-                        Back to Standings
+                        {t('common.backToStandings')}
                     </button>
                 </div>
             </div>
@@ -352,13 +354,13 @@ const TeamDetails = () => {
         return (
             <div className="container my-5">
                 <div className="alert alert-warning" role="alert">
-                    <h4 className="alert-heading">Team Not Found</h4>
-                    <p>The requested team could not be found.</p>
+                    <h4 className="alert-heading">{t('common.teamNotFoundTitle')}</h4>
+                    <p>{t('common.teamNotFoundMessage')}</p>
                     <button
                         className="btn btn-outline-warning"
                         onClick={() => navigate('/seg3525-assignment5/mlb/')}
                     >
-                        Back to Standings
+                        {t('common.backToStandings')}
                     </button>
                 </div>
             </div>
@@ -371,12 +373,12 @@ const TeamDetails = () => {
                 className="btn btn-outline-secondary mb-3"
                 onClick={() => navigate('/seg3525-assignment5/mlb/')}
             >
-                ← Back to Standings
+                ← {t('common.backToStandings')}
             </button>
             <div className="container my-6 team-graph">
                 <div className="mb-3">
                     {/* Dropdown for team selection */}
-                    <label htmlFor="teamSelect" className="form-label" style={{ padding: 10 }}>Select Team:</label>
+                    <label htmlFor="teamSelect" className="form-label" style={{ padding: 10 }}>{t('teamDetails.selectTeam')}</label>
                     <select
                         id="teamSelect"
                         className="form-select"
@@ -390,8 +392,9 @@ const TeamDetails = () => {
                             </option>
                         ))}
                     </select>
+                    
                     {/* Dropdown for data type selection */}
-                    <label htmlFor="dataTypeSelect" className="form-label" style={{ padding: 10 }}>Select Statistic:</label>
+                    <label htmlFor="dataTypeSelect" className="form-label" style={{ padding: 10 }}>{t('teamDetails.selectStatistic')}</label>
                     <select
                         id="dataTypeSelect"
                         className="form-select"
@@ -407,7 +410,7 @@ const TeamDetails = () => {
                     </select>
 
                     {/* Dropdowns for year range selection */}
-                    <label htmlFor="startYear" className="form-label" style={{ padding: 10, marginLeft: 20 }}>Start Year:</label>
+                    <label htmlFor="startYear" className="form-label" style={{ padding: 10, marginLeft: 20 }}>{t('teamDetails.startYear')}</label>
                     <select
                         id="startYear"
                         className="form-select"
@@ -422,7 +425,7 @@ const TeamDetails = () => {
                         ))}
                     </select>
 
-                    <label htmlFor="endYear" className="form-label" style={{ padding: 10 }}>End Year:</label>
+                    <label htmlFor="endYear" className="form-label" style={{ padding: 10 }}>{t('teamDetails.endYear')}</label>
                     <select
                         id="endYear"
                         className="form-select"
@@ -439,7 +442,7 @@ const TeamDetails = () => {
                 </div>
 
                 <h3 style={{ textAlign: 'center' }}>
-                    {`${getTeamLabelByName(teamName) || teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} to ${endYear}`}
+                    {`${getTeamLabelByName(teamName) || teamData?.team?.name || 'Team'} ${getCurrentDataTypeOptions()[chartDataType]?.title} ${startYear} ${t('common.rangeTo')} ${endYear}`}
                 </h3>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: chartWidth, paddingLeft: 130, paddingRight: 50 }}>
@@ -452,10 +455,10 @@ const TeamDetails = () => {
                             value={gameType}
                             onChange={(e) => handleGameTypeChange(e.target.value)}
                         >
-                            <option value="all">All Games</option>
-                            <option value="home">Home</option>
-                            <option value="away">Away</option>
-                            <option value="homevsaway">Home vs. Away</option>
+                            <option value="all">{t('teamDetails.allGames')}</option>
+                            <option value="home">{t('teamDetails.home')}</option>
+                            <option value="away">{t('teamDetails.away')}</option>
+                            <option value="homevsaway">{t('teamDetails.homeVsAway')}</option>
                         </select>
                     </div>
 
@@ -470,7 +473,7 @@ const TeamDetails = () => {
                             onChange={(e) => setExclude2020(e.target.checked)}
                         />
                         <label className="form-check-label" htmlFor="exclude2020" style={{ paddingLeft: 10 }}>
-                            Exclude 2020 (COVID year)
+                            {t('teamDetails.excludeCovid')}
                         </label>
                     </div>
                 </div>
@@ -478,7 +481,7 @@ const TeamDetails = () => {
                     className="chart"
                     data={chartData}
                     xKey="name"
-                    xName="Year"
+                    xName={t('common.year')}
                     yKey={getCurrentDataTypeOptions()[chartDataType]?.key}
                     yName={getCurrentDataTypeOptions()[chartDataType]?.label}
                     yKey2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.key2 : null}
@@ -499,42 +502,42 @@ const TeamDetails = () => {
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <h5>Team Statistics</h5>
+                                        <h5>{t('teamDetails.teamStatistics')}</h5>
                                         <table className="table table-striped">
                                             <tbody>
                                                 <tr>
-                                                    <td><strong>Division:</strong></td>
+                                                    <td><strong>{t('teamDetails.division')}:</strong></td>
                                                     <td>{teamData.divisionName}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Division Rank:</strong></td>
+                                                    <td><strong>{t('teamDetails.divisionRank')}:</strong></td>
                                                     <td>{teamData.divisionRank}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Wins:</strong></td>
+                                                    <td><strong>{t('teamDetails.wins')}:</strong></td>
                                                     <td>{teamData.wins}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Losses:</strong></td>
+                                                    <td><strong>{t('teamDetails.losses')}:</strong></td>
                                                     <td>{teamData.losses}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Win Percentage:</strong></td>
+                                                    <td><strong>{t('teamDetails.winPercentage')}:</strong></td>
                                                     <td>{teamData.winningPercentage}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Games Back:</strong></td>
+                                                    <td><strong>{t('teamDetails.gamesBack')}:</strong></td>
                                                     <td>{teamData.gamesBack}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="col-md-6">
-                                        <h5>Additional Information</h5>
+                                        <h5>{t('teamDetails.additionalInformation')}</h5>
                                         <div className="alert alert-info">
-                                            <p><strong>League:</strong> {teamData.divisionName.includes('American') ? 'American League' : 'National League'}</p>
-                                            <p><strong>Games Played:</strong> {teamData.wins + teamData.losses}</p>
-                                            <p><strong>Remaining Games:</strong> {162 - (teamData.wins + teamData.losses)}</p>
+                                            <p><strong>{t('teamDetails.league')}:</strong> {teamData.divisionName.includes('American') ? t('teamDetails.americanLeague') : t('teamDetails.nationalLeague')}</p>
+                                            <p><strong>{t('teamDetails.gamesPlayed')}:</strong> {teamData.wins + teamData.losses}</p>
+                                            <p><strong>{t('teamDetails.remainingGames')}:</strong> {162 - (teamData.wins + teamData.losses)}</p>
                                         </div>
                                     </div>
                                 </div>

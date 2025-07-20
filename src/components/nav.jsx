@@ -1,9 +1,11 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 import './nav.css'
 
 function NAV() {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
     const [currentPage, setCurrentPage] = useState('mlb');
@@ -24,6 +26,11 @@ function NAV() {
         } else if (page === 'nhl') {
             navigate('/seg3525-assignment5/nhl');
         }
+    };
+
+    // Function to change language
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
     };
 
     return (

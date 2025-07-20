@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { sportsAPI } from '../api/apiUtils.js';
 import './standings.css';
 
 const Standings = () => {
+    const { t } = useTranslation();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -24,14 +26,14 @@ const Standings = () => {
     // Function to get division name from division ID
     const getDivisionName = (divisionId) => {
         const divisionMap = {
-            200: "American League West",
-            201: "American League East",
-            202: "American League Central",
-            203: "National League West",
-            204: "National League East",
-            205: "National League Central"
+            200: t('divisions.americanLeagueWest'),
+            201: t('divisions.americanLeagueEast'),
+            202: t('divisions.americanLeagueCentral'),
+            203: t('divisions.nationalLeagueWest'),
+            204: t('divisions.nationalLeagueEast'),
+            205: t('divisions.nationalLeagueCentral')
         };
-        return divisionMap[divisionId] || `Division ${divisionId}`;
+        return divisionMap[divisionId] || t('divisions.division', { id: divisionId });
     };
 
     // Function to fetch data from API or local files
@@ -56,7 +58,7 @@ const Standings = () => {
 
             setData(result);
         } catch (err) {
-            setError(`Failed to fetch ${type} data: ${err.message}`);
+            setError(t('standings.error', { type: type.toUpperCase(), message: err.message }));
             console.error('Error fetching data:', err);
         } finally {
             setLoading(false);
@@ -78,9 +80,9 @@ const Standings = () => {
         return (
             <div className="container text-center my-5">
                 <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">{t('common.loading')}</span>
                 </div>
-                <p className="mt-3">Loading {dataType.toUpperCase()} data...</p>
+                <p className="mt-3">{t('standings.loading', { type: dataType.toUpperCase() })}</p>
             </div>
         );
     }
@@ -90,13 +92,13 @@ const Standings = () => {
         return (
             <div className="container my-5">
                 <div className="alert alert-danger" role="alert">
-                    <h4 className="alert-heading">Error!</h4>
+                    <h4 className="alert-heading">{t('common.error')}</h4>
                     <p>{error}</p>
                     <button
                         className="btn btn-outline-danger"
                         onClick={() => fetchData(dataType)}
                     >
-                        Try Again
+                        {t('standings.tryAgain')}
                     </button>
                 </div>
             </div>
@@ -116,11 +118,11 @@ const Standings = () => {
                             <thead className="table-header">
                                 <tr>
                                     <th>{getDivisionName(division.division.id)}</th>
-                                    <th>Wins</th>
-                                    <th>Losses</th>
-                                    <th>Win %</th>
-                                    <th>Games Back</th>
-                                    <th>Division Rank</th>
+                                    <th>{t('standings.wins')}</th>
+                                    <th>{t('standings.losses')}</th>
+                                    <th>{t('standings.winPercentage')}</th>
+                                    <th>{t('standings.gamesBack')}</th>
+                                    <th>{t('standings.divisionRank')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -152,7 +154,7 @@ const Standings = () => {
         <div className="container my-5">
             <div className="row">
                 <div className="col-12">
-                    <h1 className="text-center mb-4">Sports Standings</h1>
+                    <h1 className="text-center mb-4">{t('standings.title')}</h1>
 
                     {/* Data Type Selector */}
                     <div className="d-flex justify-content-center mb-4">
@@ -162,21 +164,21 @@ const Standings = () => {
                                 className={`btn ${dataType === 'mlb' ? 'btn-primary' : 'btn-outline-primary'}`}
                                 onClick={() => handleDataTypeChange('mlb')}
                             >
-                                MLB Standings
+                                {t('standings.mlb')}
                             </button>
                             <button
                                 type="button"
                                 className={`btn ${dataType === 'al' ? 'btn-primary' : 'btn-outline-primary'}`}
                                 onClick={() => handleDataTypeChange('al')}
                             >
-                                American League
+                                {t('standings.americanLeague')}
                             </button>
                             <button
                                 type="button"
                                 className={`btn ${dataType === 'nl' ? 'btn-primary' : 'btn-outline-primary'}`}
                                 onClick={() => handleDataTypeChange('nl')}
                             >
-                                National League
+                                {t('standings.nationalLeague')}
                             </button>
                         </div>
                     </div>
@@ -188,7 +190,7 @@ const Standings = () => {
                             onClick={() => fetchData(dataType)}
                             disabled={loading}
                         >
-                            <i className="bi bi-arrow-clockwise"></i> Refresh Data
+                            <i className="bi bi-arrow-clockwise"></i> {t('standings.refreshData')}
                         </button>
                     </div>
 
@@ -196,7 +198,7 @@ const Standings = () => {
                     <div className="card">
                         <div className="card-header">
                             <h3 className="card-title mb-0">
-                                {dataType === 'mlb' ? 'MLB Team Standings' : dataType === 'nl' ? 'National League Standings' : 'American League Standings'}
+                                {dataType === 'mlb' ? t('standings.mlbTeamStandings') : dataType === 'nl' ? t('standings.nationalLeagueStandings') : t('standings.americanLeagueStandings')}
                             </h3>
                         </div>
                         <div className="card-body p-0">
@@ -207,7 +209,7 @@ const Standings = () => {
                     {/* Data Summary */}
                     {data && data.players && (
                         <div className="mt-3 text-muted text-center">
-                            Showing {data.players.length} players
+                            {t('standings.showingPlayers', { count: data.players.length })}
                         </div>
                     )}
                 </div>
