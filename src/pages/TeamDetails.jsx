@@ -523,20 +523,22 @@ const TeamDetails = () => {
                         </label>
                     </div>
                 </div>
-                <MyChart
-                    className="chart"
-                    data={chartData}
-                    xKey="name"
-                    xName={t('common.year')}
-                    yKey={getCurrentDataTypeOptions()[chartDataType]?.key}
-                    yName={getCurrentDataTypeOptions()[chartDataType]?.label}
-                    yKey2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.key2 : null}
-                    yName2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.label2 : null}
-                    width={chartWidth}
-                    height={chartHeight}
-                    chartType={getCurrentDataTypeOptions()[chartDataType]?.graphType}
-                    showZeroLine={chartDataType === 'runDifferential'}
-                />
+                <div>
+                    <MyChart
+                        className="chart"
+                        data={chartData}
+                        xKey="name"
+                        xName={t('common.year')}
+                        yKey={getCurrentDataTypeOptions()[chartDataType]?.key}
+                        yName={getCurrentDataTypeOptions()[chartDataType]?.label}
+                        yKey2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.key2 : null}
+                        yName2={gameType === "homevsaway" ? getCurrentDataTypeOptions()[chartDataType]?.label2 : null}
+                        width={chartWidth}
+                        height={chartHeight}
+                        chartType={getCurrentDataTypeOptions()[chartDataType]?.graphType}
+                        showZeroLine={chartDataType === 'runDifferential'}
+                    />
+                </div>
             </div>
 
             <div className="container my-5">

@@ -125,7 +125,7 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
         }
     };
     return (
-        <div className="container" style={{ width: '100%', maxWidth: '100%', height: '80%', maxHeight: '80%', margin: '0 0' }}>
+        <div className="container" style={{ width: '100%', maxWidth: '100%', height: height, margin: '0 0' }}>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '100%' }}>
                 {renderChart()}
             </div>
