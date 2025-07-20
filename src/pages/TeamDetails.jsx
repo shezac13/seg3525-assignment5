@@ -227,6 +227,7 @@ const TeamDetails = () => {
 
     const teamOptions = {
         diamondbacks: { key: 109, label: 'Arizona Diamondbacks' },
+        athletics: { key: 133, label: 'Athletics' },
         braves: { key: 144, label: 'Atlanta Braves' },
         orioles: { key: 110, label: 'Baltimore Orioles' },
         redsox: { key: 111, label: 'Boston Red Sox' },
@@ -245,7 +246,6 @@ const TeamDetails = () => {
         twins: { key: 142, label: 'Minnesota Twins' },
         mets: { key: 121, label: 'New York Mets' },
         yankees: { key: 147, label: 'New York Yankees' },
-        athletics: { key: 133, label: 'Oakland Athletics' },
         phillies: { key: 143, label: 'Philadelphia Phillies' },
         pirates: { key: 134, label: 'Pittsburgh Pirates' },
         padres: { key: 135, label: 'San Diego Padres' },
