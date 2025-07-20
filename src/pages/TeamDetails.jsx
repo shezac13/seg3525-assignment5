@@ -60,7 +60,7 @@ const TeamDetails = () => {
                 if (team.team.id.toString() === teamId) {
                     foundTeam = {
                         ...team,
-                        divisionName: getDivisionName(division.division.id)
+                        divisionId: division.division.id
                     };
                 }
             });
@@ -555,7 +555,7 @@ const TeamDetails = () => {
                                             <tbody>
                                                 <tr>
                                                     <td><strong>{t('teamDetails.division')}:</strong></td>
-                                                    <td>{teamData.divisionName}</td>
+                                                    <td>{getDivisionName(teamData.divisionId)}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>{t('teamDetails.divisionRank')}:</strong></td>
@@ -583,7 +583,7 @@ const TeamDetails = () => {
                                     <div className="col-md-6">
                                         <h5>{t('teamDetails.additionalInformation')}</h5>
                                         <div className="alert alert-info">
-                                            <p><strong>{t('teamDetails.league')}:</strong> {teamData.divisionName.includes('American') ? t('teamDetails.americanLeague') : t('teamDetails.nationalLeague')}</p>
+                                            <p><strong>{t('teamDetails.league')}:</strong> {getDivisionName(teamData.divisionId).includes('American') ? t('teamDetails.americanLeague') : t('teamDetails.nationalLeague')}</p>
                                             <p><strong>{t('teamDetails.gamesPlayed')}:</strong> {teamData.wins + teamData.losses}</p>
                                             <p><strong>{t('teamDetails.remainingGames')}:</strong> {162 - (teamData.wins + teamData.losses)}</p>
                                         </div>
