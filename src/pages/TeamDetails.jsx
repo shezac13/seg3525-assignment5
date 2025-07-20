@@ -576,6 +576,10 @@ const TeamDetails = () => {
                                                     <td>{teamData.winningPercentage}</td>
                                                 </tr>
                                                 <tr>
+                                                    <td><strong>{t('teamDetails.runDifference')}:</strong></td>
+                                                    <td>{teamData.runDifferential}</td>
+                                                </tr>
+                                                <tr>
                                                     <td><strong>{t('teamDetails.gamesBack')}:</strong></td>
                                                     <td>{teamData.gamesBack}</td>
                                                 </tr>
