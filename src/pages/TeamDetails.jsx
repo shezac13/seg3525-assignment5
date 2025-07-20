@@ -3,8 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sportsAPI } from '../api/apiUtils.js';
 import MyChart from '../components/graph.jsx';
-import { setCookie, getCookie } from '../utils/cookies.js';
-
+import { loadStatsFromCache, saveStatsToCache } from '../utils/cookiesUtils.js';
 import './TeamDetails.css';
 
 const TeamDetails = () => {
@@ -53,40 +52,6 @@ const TeamDetails = () => {
     const COOKIE_NAME = 'mlb_stats_2000_2024';
     const COOKIE_EXPIRY_DAYS = 30; // Cache for 30 days as the values are from previous years
 
-    const saveStatsToCache = (stats) => {
-        try {
-            const dataToCache = {
-                data: stats,
-                timestamp: Date.now(),
-                version: '1.0' // For future cache invalidation if data structure changes
-            };
-            setCookie(COOKIE_NAME, JSON.stringify(dataToCache), COOKIE_EXPIRY_DAYS);
-        } catch (error) {
-            console.warn('Failed to save stats to cache:', error);
-        }
-    };
-
-    const loadStatsFromCache = () => {
-        try {
-            const cachedData = getCookie(COOKIE_NAME);
-            if (!cachedData) return null;
-
-            const parsed = JSON.parse(cachedData);
-            const cacheAge = Date.now() - parsed.timestamp;
-            const maxAge = COOKIE_EXPIRY_DAYS * 24 * 60 * 60 * 1000; // Convert days to milliseconds
-
-            // Check if cache is still valid
-            if (cacheAge > maxAge) {
-                return null;
-            }
-
-            return parsed.data;
-        } catch (error) {
-            console.warn('Failed to load stats from cache:', error);
-            return null;
-        }
-    };
-
     const findTeamData = (standingsData, teamId) => {
         let foundTeam = null;
         // Find the team in the standings data
@@ -114,16 +79,24 @@ const TeamDetails = () => {
                     return;
                 }
 
-                const standingsData = await sportsAPI.getMLBStandings();
+                let standingsData2025 = loadStatsFromCache('mlb_standings_2025', 0.5);
+                if (!standingsData2025) {
+                    console.log('Fetching MLB 2025 stats from API (cache miss)');
+                    standingsData2025 = await sportsAPI.getMLBStandings();
+                    saveStatsToCache(standingsData2025, 'mlb_standings_2025', 0.5);
+                }
+                else {
+                    console.log('Loading MLB 2025 stats from cache');
+                }
 
                 let foundTeam = null;
-                foundTeam = findTeamData(standingsData, teamId.toString());
+                foundTeam = findTeamData(standingsData2025, teamId.toString());
 
                 if (foundTeam) {
                     setTeamData(foundTeam);
 
                     // Try to load stats from cache first
-                    let allStats = loadStatsFromCache();
+                    let allStats = loadStatsFromCache(COOKIE_NAME, COOKIE_EXPIRY_DAYS);
 
                     if (allStats) {
                         console.log('Loading MLB stats from cache');
@@ -134,7 +107,7 @@ const TeamDetails = () => {
                         setAllYearStats(allStats);
 
                         // Save to cache for future use
-                        saveStatsToCache(allStats);
+                        saveStatsToCache(allStats, COOKIE_NAME, COOKIE_EXPIRY_DAYS);
                     }
                 } else {
                     setError(t('common.teamNotFound'));
@@ -147,9 +120,7 @@ const TeamDetails = () => {
             }
         };
 
-        if (teamName) {
-            fetchTeamData();
-        }
+        fetchTeamData();
     }, [teamName]);
 
     const getDivisionName = (divisionId) => {
@@ -392,7 +363,7 @@ const TeamDetails = () => {
                             </option>
                         ))}
                     </select>
-                    
+
                     {/* Dropdown for data type selection */}
                     <label htmlFor="dataTypeSelect" className="form-label" style={{ padding: 10 }}>{t('teamDetails.selectStatistic')}</label>
                     <select

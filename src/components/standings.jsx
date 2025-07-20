@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sportsAPI } from '../api/apiUtils.js';
+import { loadStatsFromCache, saveStatsToCache } from '../utils/cookiesUtils.js';
 import './standings.css';
 
 const Standings = () => {
@@ -36,20 +37,37 @@ const Standings = () => {
         return divisionMap[divisionId] || t('divisions.division', { id: divisionId });
     };
 
-    // Function to fetch data from API or local files
-    const fetchData = async (type) => {
-        setLoading(true);
-        setError(null);
+    // Cookie management functions for caching
+    const COOKIE_NAME = 'mlb_standings_2025';
+    const COOKIE_EXPIRY_DAYS = 0.5; // Cache for 0.5 days as the values are recent
 
+    // Function to fetch data from API or local files
+    const fetchData = async (type, forceRefresh = false) => {
+        setError(null);
+        
         try {
             let result;
-
+            let standings = loadStatsFromCache(COOKIE_NAME, COOKIE_EXPIRY_DAYS);
+            if (standings && !forceRefresh) {
+                console.log('Loading MLB stats from cache');
+            } else {
+                setLoading(true);
+                console.log('Fetching MLB stats from API (cache miss)');
+                standings = await sportsAPI.getMLBStandings();
+                saveStatsToCache(standings, COOKIE_NAME, COOKIE_EXPIRY_DAYS);
+            }
             if (type === 'mlb') {
-                result = await sportsAPI.getMLBStandings();
+                result = standings;
             } else if (type === 'al') {
-                result = await sportsAPI.getMLBALStandings();
+                // Filter for American League divisions (200, 201, 202)
+                result = {
+                    records: standings.records.filter(division => [200, 201, 202].includes(division.division.id))
+                };
             } else if (type === 'nl') {
-                result = await sportsAPI.getMLBNLStandings();
+                // Filter for National League divisions (203, 204, 205)
+                result = {
+                    records: standings.records.filter(division => [203, 204, 205].includes(division.division.id))
+                };
             }
             // Not yet implemented
             // else if (type === 'wildcard') {
@@ -96,7 +114,7 @@ const Standings = () => {
                     <p>{error}</p>
                     <button
                         className="btn btn-outline-danger"
-                        onClick={() => fetchData(dataType)}
+                        onClick={() => fetchData(dataType, true)}
                     >
                         {t('standings.tryAgain')}
                     </button>
@@ -187,7 +205,7 @@ const Standings = () => {
                     <div className="d-flex justify-content-end mb-3">
                         <button
                             className="btn btn-outline-secondary"
-                            onClick={() => fetchData(dataType)}
+                            onClick={() => fetchData(dataType, true)}
                             disabled={loading}
                         >
                             <i className="bi bi-arrow-clockwise"></i> {t('standings.refreshData')}

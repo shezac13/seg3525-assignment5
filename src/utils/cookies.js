@@ -1,4 +1,4 @@
-// Simple cookie utilities for storing count
+// Simple cookie utilities
 
 export const setCookie = (name, value, days = 30) => {
   const date = new Date();
