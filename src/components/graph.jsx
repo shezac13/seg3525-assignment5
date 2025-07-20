@@ -2,10 +2,10 @@ import React from 'react';
 import {
     LineChart, Line,
     BarChart, Bar,
-    XAxis, YAxis, CartesianGrid, Tooltip,
+    XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine,
 } from 'recharts';
 
-const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', yName = 'Value', yName2, width = 800, height = 500, chartType = 'line' }) => {
+const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', yName = 'Value', yName2, width = 800, height = 500, chartType = 'line', showZeroLine = false }) => {
     const customTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
@@ -75,6 +75,9 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                             name={yName2 || 'Second Line'}
                         />
                     )}
+                    {showZeroLine && (
+                        <ReferenceLine y={0} stroke="#ff00006b" strokeWidth={2} />
+                    )}
 
                 </LineChart>
             );
@@ -111,6 +114,10 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                             fill="#68adeeff"
                             name={yName2 || 'Second Bar'}
                         />
+                    )}
+                    {/* Shouldn't really be used */}
+                    {showZeroLine && (
+                        <ReferenceLine y={0} stroke="red" strokeWidth={2} />
                     )}
 
                 </BarChart>

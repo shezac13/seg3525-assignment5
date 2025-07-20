@@ -463,6 +463,7 @@ const TeamDetails = () => {
                     width={chartWidth}
                     height={chartHeight}
                     chartType={getCurrentDataTypeOptions()[chartDataType]?.graphType}
+                    showZeroLine={chartDataType === 'runDifferential'}
                 />
             </div>
 
