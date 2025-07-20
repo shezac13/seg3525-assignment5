@@ -41,11 +41,11 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                     <CartesianGrid strokeDasharray="2 2" />
                     <XAxis
                         dataKey={xKey}
-                        label={{ value: xName, angle: 0, position: 'bottom' }}
+                        label={{ value: xName, angle: 0, position: 'bottom', style: { textAnchor: 'middle' } }}
                         tick={{ fontSize: 16 }}
                     />
                     <YAxis
-                        label={{ value: yName, angle: -90, position: 'insideLeft' }}
+                        label={{ value: yName, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle' } }}
                         tick={{ fontSize: 16 }}
                         interval={0}
                     />
@@ -86,22 +86,32 @@ const MyChart = ({ data, xKey = 'name', yKey = 'value', yKey2, xName = 'Year', y
                     height={height}
                     data={data}
                     margin={{ top: 8, right: 50, left: 70, bottom: 60 }}
+                    barCategoryGap="20%"
+                    barGap={0}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
                         dataKey={xKey}
-                        label={{ value: yName, angle: -90, position: 'insideLeft' }}
+                        label={{ value: xName, angle: 0, position: 'bottom', style: { textAnchor: 'middle' } }}
                         tick={{ fontSize: 16 }}
                     />
                     <YAxis
-                        label={{ value: yName, angle: -90, position: 'insideLeft' }}
+                        label={{ value: yName, angle: -90, position: 'insideLeft', style: { textAnchor: 'middle' } }}
                         tick={{ fontSize: 16 }}
                     />
                     <Tooltip content={customTooltip} />
                     <Bar
                         dataKey={yKey}
-                        fill="#8884d8"
+                        fill="#d44a4aff"
+                        name={yName || 'First Bar'}
                     />
+                    {yKey2 && (
+                        <Bar
+                            dataKey={yKey2}
+                            fill="#68adeeff"
+                            name={yName2 || 'Second Bar'}
+                        />
+                    )}
 
                 </BarChart>
             );
