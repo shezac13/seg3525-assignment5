@@ -16,8 +16,7 @@
     "tryAgain": "Réessayer",
     "mlbTeamStandings": "Classements des équipes",
     "nationalLeagueStandings": "Classements de la Ligue Nationale",
-    "americanLeagueStandings": "Classements de la Ligue Américaine",
-    "showingPlayers": "Affichage de {{count}} joueurs"
+    "americanLeagueStandings": "Classements de la Ligue Américaine"
   },
   "common": {
     "loading": "Chargement...",
@@ -77,6 +76,7 @@
     "aboutMLB": "À Propos de la MLB",
     "aboutMLBDescription": "La Ligue Majeure de Baseball (MLB) est une organisation de baseball professionnel composée de 30 équipes réparties entre la Ligue Américaine (AL) et la Ligue Nationale (NL). Fondée en 1903, la MLB est la plus ancienne ligue de sport professionnel majeur aux États-Unis et au Canada.",
     "quickFacts": "Faits Rapides",
+    "teams": "Équipes",
     "regularSeasonGames": "Matchs de Saison Régulière",
     "yearEstablished": "Année de Fondation",
     "division": "Division:",

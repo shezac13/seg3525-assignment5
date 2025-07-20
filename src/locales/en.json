@@ -16,8 +16,7 @@
     "tryAgain": "Try Again",
     "mlbTeamStandings": "MLB Team Standings",
     "nationalLeagueStandings": "National League Standings",
-    "americanLeagueStandings": "American League Standings",
-    "showingPlayers": "Showing {{count}} players"
+    "americanLeagueStandings": "American League Standings"
   },
   "common": {
     "loading": "Loading...",
@@ -30,7 +29,6 @@
     "teamNotFoundMessage": "The requested team could not be found.",
     "rangeTo": "to",
     "year": "Year"
-
   },
   "teamDetails": {
     "loadingTeamDetails": "Loading team details...",
@@ -78,6 +76,7 @@
     "aboutMLB": "About MLB",
     "aboutMLBDescription": "Major League Baseball (MLB) is a professional baseball organization that consists of 30 teams split between the American League (AL) and National League (NL). Founded in 1903, MLB is the oldest major professional sports league in the United States and Canada.",
     "quickFacts": "Quick Facts",
+    "teams": "Teams",
     "regularSeasonGames": "Regular Season Games",
     "yearEstablished": "Year Established",
     "division": "Division:",

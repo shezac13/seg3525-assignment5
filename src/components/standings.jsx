@@ -225,13 +225,6 @@ const Standings = () => {
                             {renderMLBStandings()}
                         </div>
                     </div>
-
-                    {/* Data Summary */}
-                    {data && data.players && (
-                        <div className="mt-3 text-muted text-center">
-                            {t('standings.showingPlayers', { count: data.players.length })}
-                        </div>
-                    )}
                 </div>
             </div>
         </div>
