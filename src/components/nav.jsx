@@ -14,8 +14,6 @@ function NAV() {
     useEffect(() => {
         if (location.pathname === '/seg3525-assignment5/' || location.pathname.startsWith('/seg3525-assignment5/mlb')) {
             setCurrentPage('mlb');
-        } else if (location.pathname === '/nhl') {
-            setCurrentPage('nhl');
         }
     }, [location]);
 
@@ -23,8 +21,6 @@ function NAV() {
         setCurrentPage(page);
         if (page === 'mlb') {
             navigate('/seg3525-assignment5/mlb');
-        } else if (page === 'nhl') {
-            navigate('/seg3525-assignment5/nhl');
         }
     };
 
@@ -36,18 +32,32 @@ function NAV() {
     return (
         <div className="app">
             <nav className="navigation">
-                <button
-                    onClick={() => handlePageChange('mlb')}
-                    className={currentPage === 'mlb' ? 'active' : ''}
-                >
-                    MLB
-                </button>
-                <button
-                    onClick={() => handlePageChange('nhl')}
-                    className={currentPage === 'nhl' ? 'active' : ''}
-                >
-                    NHL
-                </button>
+                <div className="nav-left">
+                    <button
+                        onClick={() => handlePageChange('mlb')}
+                        className={currentPage === 'mlb' ? 'active' : ''}
+                    >
+                        MLB
+                    </button>
+                </div>
+                <div className="nav-right">
+                    <div className="language-selector">
+                        <button
+                            type="button"
+                            className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}
+                            onClick={() => changeLanguage('en')}
+                        >
+                            EN
+                        </button>
+                        <button
+                            type="button"
+                            className={`lang-btn ${i18n.language === 'fr' ? 'active' : ''}`}
+                            onClick={() => changeLanguage('fr')}
+                        >
+                            FR
+                        </button>
+                    </div>
+                </div>
             </nav>
         </div>
     )
