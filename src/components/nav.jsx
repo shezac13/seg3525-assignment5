@@ -44,14 +44,14 @@ function NAV() {
                     <div className="language-selector">
                         <button
                             type="button"
-                            className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}
+                            className={`lang-btn ${i18n.language.startsWith('en') ? 'active' : ''}`}
                             onClick={() => changeLanguage('en')}
                         >
                             EN
                         </button>
                         <button
                             type="button"
-                            className={`lang-btn ${i18n.language === 'fr' ? 'active' : ''}`}
+                            className={`lang-btn ${i18n.language.startsWith('fr') ? 'active' : ''}`}
                             onClick={() => changeLanguage('fr')}
                         >
                             FR
